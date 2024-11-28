@@ -1,0 +1,41 @@
+# Подключаем модуль с данными
+import scancodes_map  # Замените 'scancodes_map' на имя вашего файла без расширения .py
+import keyboard
+
+def find_all_keys(scan_code):
+    results = []
+
+    # Поиск в словаре price
+    for key, codes in scancodes_map.price.items():
+        if scan_code in codes:
+            results.append(f"Штраф - код: {key}")
+    
+    # Поиск в словаре hand
+    for key, codes in scancodes_map.hand.items():
+        if scan_code in codes:
+            results.append(f"Рука - код: {key}")
+    
+    # Поиск в словаре fingers
+    for key, codes in scancodes_map.fingers.items():
+        if scan_code in codes:
+            results.append(f"Палец - код: {key}")
+    
+    return results if results else ["Код не найден"]
+
+# Функция для обработки нажатий клавиш
+def on_key_event(event):
+    scan_code = str(event.scan_code)  # Сканкод в строковом формате
+    char = event.name  # Имя клавиши (символ, если есть)
+
+    results = find_all_keys(scan_code)
+    
+    print(f"Сканкод: {scan_code}, Символ: {char}")
+    print("Найденные значения:")
+    print("\n".join(results))
+    print("-" * 30)
+
+# Подписываемся на все события нажатия клавиш
+keyboard.hook(on_key_event)
+
+# Бесконечный цикл для удержания программы активной
+keyboard.wait("esc")  # Нажмите ESC для выхода
